@@ -1,20 +1,24 @@
 ﻿using SFML.Graphics;
 using SFML.Window;
-using System.Collections.Generic;
 
-namespace SFML_First
+namespace SpaceInvaders
 {
+    /**
+     * This class sets any SFML-Window related settings.
+     */
     internal class InitialiseSFML
     {
-        private const int HEIGHT = 480;
-        private const string TITLE = "Second";
-        private const int WIDTH = 640;
+        private const string TITLE = "Space Invaders";
+        private const uint WINDOW_WIDTH = 570;
+        private const uint WINDOW_HEIGHT = WINDOW_WIDTH * (4 / 3);
 
         internal static RenderWindow InitialiseWindow()
         {
-            ContextSettings settings = new ContextSettings();
-            settings.AntialiasingLevel = 8;
-            VideoMode mode = new VideoMode(WIDTH, HEIGHT);
+            ContextSettings settings = new ContextSettings
+            {
+                AntialiasingLevel = 8
+            };
+            VideoMode mode = new VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
             RenderWindow window = new RenderWindow(mode, TITLE, Styles.Default, settings);
             window.SetVerticalSyncEnabled(true);
 
