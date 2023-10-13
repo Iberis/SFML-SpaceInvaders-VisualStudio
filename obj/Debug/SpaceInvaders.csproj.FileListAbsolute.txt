@@ -113,7 +113,6 @@ H:\c#\SFML\SpaceInvaders\bin\Debug\System.Xml.XmlDocument.dll
 H:\c#\SFML\SpaceInvaders\bin\Debug\System.Xml.XmlSerializer.dll
 H:\c#\SFML\SpaceInvaders\bin\Debug\System.Xml.XPath.dll
 H:\c#\SFML\SpaceInvaders\bin\Debug\System.Xml.XPath.XDocument.dll
-H:\c#\SFML\SpaceInvaders\obj\Debug\SpaceInvaders.csprojAssemblyReference.cache
 H:\c#\SFML\SpaceInvaders\obj\Debug\SpaceInvaders.exe.config
 H:\c#\SFML\SpaceInvaders\bin\Debug\Assets\Cannon.bmp
 H:\c#\SFML\SpaceInvaders\bin\Debug\Assets\Crab1.bmp
@@ -123,3 +122,5 @@ H:\c#\SFML\SpaceInvaders\bin\Debug\Assets\Jelly1.bmp
 H:\c#\SFML\SpaceInvaders\bin\Debug\Assets\Jelly2.bmp
 H:\c#\SFML\SpaceInvaders\bin\Debug\Assets\Squid1.bmp
 H:\c#\SFML\SpaceInvaders\bin\Debug\Assets\Squid2.bmp
+H:\C#\SFML\SpaceInvaders\obj\Debug\SpaceInvaders.csproj.AssemblyReference.cache
+H:\C#\SFML\SpaceInvaders\obj\Debug\SpaceInvaders.csproj.SuggestedBindingRedirects.cache
