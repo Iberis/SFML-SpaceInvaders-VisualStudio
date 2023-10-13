@@ -39,7 +39,7 @@ namespace SpaceInvaders
         {
             state = new bool[HEIGHT, WIDTH];
             Array.Copy(template, state, state.Length);
-            changed = true;
+            changed = true; // initialises to true for initial loading via GetSprite()
             sprite = new Sprite
             {
                 Position = position
