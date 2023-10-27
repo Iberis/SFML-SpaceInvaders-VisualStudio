@@ -6,11 +6,11 @@ namespace SpaceInvaders
     /**
      * This class sets any SFML-Window related settings.
      */
-    internal class InitialiseSFML
+    public static class InitialiseSfml
     {
-        private const string TITLE = "Space Invaders";
-        private const uint WINDOW_WIDTH = 570;
-        private const uint WINDOW_HEIGHT = WINDOW_WIDTH * (4 / 3);
+        private const string Title = "Space Invaders";
+        private const uint WindowWidth = 570;
+        private const uint WindowHeight = WindowWidth * (4 / 3);
 
         internal static RenderWindow InitialiseWindow()
         {
@@ -18,8 +18,8 @@ namespace SpaceInvaders
             {
                 AntialiasingLevel = 8
             };
-            VideoMode mode = new VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT);
-            RenderWindow window = new RenderWindow(mode, TITLE, Styles.Default, settings);
+            VideoMode mode = new VideoMode(WindowWidth, WindowHeight);
+            RenderWindow window = new RenderWindow(mode, Title, Styles.Default, settings);
             window.SetVerticalSyncEnabled(true);
 
             return window;

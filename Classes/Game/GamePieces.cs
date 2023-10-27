@@ -33,7 +33,7 @@ namespace SpaceInvaders
          */
         internal static Sprite GeneratePlayerShot(Sprite player)
         {
-            Sprite shot = new Sprite(Game.Textures.playerShot)
+            Sprite shot = new Sprite(Textures.GetInstance().playerShot)
             {
                 Scale = new Vector2f(1f / 2f, 1f / 2f)
             };
@@ -58,13 +58,13 @@ namespace SpaceInvaders
             switch (type)
             {
                 case InvaderType.Small:
-                    textures = Game.Textures.invaderSmallShots;
+                    textures = Textures.GetInstance().invaderSmallShots;
                     break;
                 case InvaderType.Medium:
-                    textures = Game.Textures.invaderMediumShots;
+                    textures = Textures.GetInstance().invaderMediumShots;
                     break;
                 case InvaderType.Large:
-                    textures = Game.Textures.invaderLargeShots;
+                    textures = Textures.GetInstance().invaderLargeShots;
                     break;
                 default:
                     throw new NotImplementedException(
@@ -99,12 +99,12 @@ namespace SpaceInvaders
         }
 
 
-        private static List<Invader> GetSmallInvaders(ref Vector2f currentPosition)
+        private static IEnumerable<Invader> GetSmallInvaders(ref Vector2f currentPosition)
         {
             List<Invader> list = new List<Invader>();
             for (int i = 0; i < 11; i++)
             {
-                Invader invader = new Invader(Game.Textures.invaderSmall, (BinaryState)(i % 2), InvaderType.Small);
+                Invader invader = new Invader(Textures.GetInstance().invaderSmall, (BinaryState)(i % 2), InvaderType.Small);
                 // X + 2 is to center the column
                 invader.Sprite.Position = new Vector2f(currentPosition.X + 2, currentPosition.Y);
                 list.Add(invader);
@@ -124,7 +124,7 @@ namespace SpaceInvaders
             {
                 for (int i = 0; i < 11; i++)
                 {
-                    Invader invader = new Invader(Game.Textures.invaderMedium, (BinaryState)(i % 2), InvaderType.Medium);
+                    Invader invader = new Invader(Textures.GetInstance().invaderMedium, (BinaryState)(i % 2), InvaderType.Medium);
                     // X + 1 is to center the column
                     invader.Sprite.Position = new Vector2f(currentPosition.X + 1, currentPosition.Y);
                     list.Add(invader);
@@ -138,15 +138,17 @@ namespace SpaceInvaders
             return list;
         }
 
-        private static List<Invader> GetLargeInvaders(ref Vector2f currentPosition)
+        private static IEnumerable<Invader> GetLargeInvaders(ref Vector2f currentPosition)
         {
             List<Invader> list = new List<Invader>();
             for (int row = 0; row < 2; row++)
             {
                 for (int i = 0; i < 11; i++)
                 {
-                    Invader invader = new Invader(Game.Textures.invaderLarge, (BinaryState)(i % 2), InvaderType.Large);
-                    invader.Sprite.Position = new Vector2f(currentPosition.X, currentPosition.Y);
+                    Invader invader = new Invader(Textures.GetInstance().invaderLarge, (BinaryState)(i % 2), InvaderType.Large)
+                    {
+                        Sprite = { Position = new Vector2f(currentPosition.X, currentPosition.Y) }
+                    };
                     list.Add(invader);
                     // increment for next column
                     currentPosition.X += OFFSET_HORIZONTAL;
@@ -165,7 +167,7 @@ namespace SpaceInvaders
          */
         internal static Sprite GetPlayer()
         {
-            Sprite sprite = new Sprite(Game.Textures.player)
+            Sprite sprite = new Sprite(Textures.GetInstance().player)
             {
                 Scale = new Vector2f(PLAYER_SPRITE_SCALING_FACTOR, PLAYER_SPRITE_SCALING_FACTOR)
             };

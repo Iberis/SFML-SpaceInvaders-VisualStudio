@@ -14,7 +14,7 @@ namespace SpaceInvaders
         private readonly Texture[] textures;
         private readonly InvaderType type;
         private BinaryState index;
-        internal bool IsAlive { get; private set; } = true;
+        private bool IsAlive { get; set; } = true;
         internal bool IsDying { get; private set; } = false;
 
         /**
@@ -62,10 +62,7 @@ namespace SpaceInvaders
          */
         internal Sprite Animate()
         {
-            if (index.Equals(BinaryState.Zero))
-                index = BinaryState.One;
-            else
-                index = BinaryState.Zero;
+            index = index.Equals(BinaryState.Zero) ? BinaryState.One : BinaryState.Zero;
 
             Sprite.Texture = textures[(int)index];
             return Sprite;
@@ -83,7 +80,7 @@ namespace SpaceInvaders
             {
                 IsAlive = false;
                 IsDying = true;
-                Sprite.Texture = Game.Textures.invaderDeathWhite;
+                Sprite.Texture = Textures.GetInstance().invaderDeathWhite;
                 //TODO: Manipulate white texture to adjust to invader color
             }
             else

@@ -11,10 +11,10 @@ namespace SpaceInvaders
      */
     internal class Textures
     {
-        private static readonly Textures singleton = new Textures();
+        private static readonly Textures Singleton = new Textures();
         internal static Textures GetInstance()
         {
-            return singleton;
+            return Singleton;
         }
 
         /**
@@ -27,13 +27,13 @@ namespace SpaceInvaders
         private Textures()
         {
             // Player texture
-            Image player = new Image(@"H:\c#\SFML\SpaceInvaders\Assets\Cannon.bmp");
-            player.CreateMaskFromColor(Color.Black);
-            this.player = new Texture(player);
+            Image playerImage = new Image(@"H:\c#\SFML\SpaceInvaders\Assets\Cannon.bmp");
+            playerImage.CreateMaskFromColor(Color.Black);
+            player = new Texture(playerImage);
 
-            //Image playerDeath = new Image(@"");              <-- Add file once aquired.
-            //playerDeath.CreateMaskFromColor(Color.Black);
-            //this.playerDeath = new Texture(playerDeath); 
+            //Image playerDeathImage = new Image(@"");              <-- Add file once aquired.
+            //playerDeathImage.CreateMaskFromColor(Color.Black);
+            //playerDeath = new Texture(playerDeathImage); 
 
             #region Invaders
             // Load images and set transparency
@@ -75,37 +75,37 @@ namespace SpaceInvaders
             #region Effects
             // Effects include shots and death/destruction textures
             // Load sprite map image and set transparency
-            Image Effects = new Image(@"H:\C#\SFML\SpaceInvaders\Assets\Effects.bmp");
-            Effects.CreateMaskFromColor(Color.Black);
+            Image effects = new Image(@"H:\C#\SFML\SpaceInvaders\Assets\Effects.bmp");
+            effects.CreateMaskFromColor(Color.Black);
 
             // Generate textures
-            playerShot = new Texture(Effects, new IntRect(0, 0, 3, 12));
-            playerShotExplosion = new Texture(Effects, new IntRect(37, 13, 20, 20));
+            playerShot = new Texture(effects, new IntRect(0, 0, 3, 12));
+            playerShotExplosion = new Texture(effects, new IntRect(37, 13, 20, 20));
 
-            invaderShotExplosionWhite = new Texture(Effects, new IntRect(0, 13, 15, 20));
-            invaderDeathWhite = new Texture(Effects, new IntRect(75, 13, 32, 20));
+            invaderShotExplosionWhite = new Texture(effects, new IntRect(0, 13, 15, 20));
+            invaderDeathWhite = new Texture(effects, new IntRect(75, 13, 32, 20));
             invaderSmallShots = new Texture[4]
             {
-                new Texture(Effects, new IntRect(0, 41, 9, 16)),
-                new Texture(Effects, new IntRect(36, 41, 9, 16)),
-                new Texture(Effects, new IntRect(72, 41, 9, 16)),
-                new Texture(Effects, new IntRect(108, 41, 9, 16))
+                new Texture(effects, new IntRect(0, 41, 9, 16)),
+                new Texture(effects, new IntRect(36, 41, 9, 16)),
+                new Texture(effects, new IntRect(72, 41, 9, 16)),
+                new Texture(effects, new IntRect(108, 41, 9, 16))
             };
 
             invaderMediumShots = new Texture[4]
             {
-                new Texture(Effects, new IntRect(0, 93, 9, 18)),
-                new Texture(Effects, new IntRect(36, 93, 9, 18)),
-                new Texture(Effects, new IntRect(72, 93, 9, 18)),
-                new Texture(Effects, new IntRect(108, 93, 9, 18))
+                new Texture(effects, new IntRect(0, 93, 9, 18)),
+                new Texture(effects, new IntRect(36, 93, 9, 18)),
+                new Texture(effects, new IntRect(72, 93, 9, 18)),
+                new Texture(effects, new IntRect(108, 93, 9, 18))
             };
 
             invaderLargeShots = new Texture[4]
             {
-                new Texture(Effects, new IntRect(0, 144, 7, 18)),
-                new Texture(Effects, new IntRect(36, 144, 8, 18)),
-                new Texture(Effects, new IntRect(73, 144, 7, 18)),
-                new Texture(Effects, new IntRect(109, 144, 8, 18))
+                new Texture(effects, new IntRect(0, 144, 7, 18)),
+                new Texture(effects, new IntRect(36, 144, 8, 18)),
+                new Texture(effects, new IntRect(73, 144, 7, 18)),
+                new Texture(effects, new IntRect(109, 144, 8, 18))
             };
             #endregion
         }

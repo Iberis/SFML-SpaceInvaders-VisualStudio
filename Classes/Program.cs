@@ -7,11 +7,11 @@ namespace SpaceInvaders
      * This class contains the Main.
      * </summary>
      */
-    internal class Program
+    public static class Program
     {
         private static void Main(string[] args)
         {
-            RenderWindow window = InitialiseSFML.InitialiseWindow();
+            RenderWindow window = InitialiseSfml.InitialiseWindow();
             Renderer renderer = new Renderer(window, Game.GetInstance());
             renderer.Render();
         }

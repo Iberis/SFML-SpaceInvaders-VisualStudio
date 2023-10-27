@@ -2,6 +2,8 @@
 using SFML.System;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace SpaceInvaders
 {
@@ -12,10 +14,10 @@ namespace SpaceInvaders
      */
     internal class Game
     {
-        private static Game singleton = new Game();
+        private static Game _singleton = new Game();
         internal static Game GetInstance()
         {
-            return singleton;
+            return _singleton;
         }
         /**
          * <summary>
@@ -25,11 +27,10 @@ namespace SpaceInvaders
          */
         internal static Game NewGame()
         {
-            singleton = new Game();
-            return singleton;
+            _singleton = new Game();
+            return _singleton;
         }
 
-        internal static Textures Textures { get; } = Textures.GetInstance();
         // Logical Pixels
         internal const int WIDTH = 285;
         internal const int HEIGHT = WIDTH * (4/3);
@@ -64,7 +65,7 @@ namespace SpaceInvaders
             livingInvaders = new List<Invader>(invaders);
             invaderShots = new List<InvaderShot>();
             bunkers = new List<Bunker>();
-            placeBunkers();
+            PlaceBunkers();
 
             bottomLine = new RectangleShape(new Vector2f(WIDTH, 1))
             {
@@ -76,15 +77,16 @@ namespace SpaceInvaders
                 FillColor = new Color(32, 255, 32),
                 Position = new Vector2f(0, 25)
             };
+            return;
 
-            void placeBunkers()
+            void PlaceBunkers()
             {
                 float height = HEIGHT - (player.GetGlobalBounds().Height * 6 + Bunker.HEIGHT);
-                Vector2f startpos = new Vector2f(BUNKER_BORDER_OFFSET - Bunker.WIDTH / 2, height);
+                Vector2f startPosition = new Vector2f(BUNKER_BORDER_OFFSET - Bunker.WIDTH / 2, height);
                 for (int i = 0; i < BUNKER_COUNT; i++)
                 {
-                    bunkers.Add(new Bunker(startpos));
-                    startpos.X += BUNKER_BORDER_OFFSET;
+                    bunkers.Add(new Bunker(startPosition));
+                    startPosition.X += BUNKER_BORDER_OFFSET;
                 }
             }
         }
@@ -108,7 +110,7 @@ namespace SpaceInvaders
          */
         internal void RandomShot()
         {
-            if (!(rng.Next(3) == 0))
+            if (rng.Next(3) != 0)
             {
                 return;
             }
@@ -125,12 +127,48 @@ namespace SpaceInvaders
          */
         internal void AdvanceShots()
         {
+            // Player Shot
             MoveSprites.Ascent(playerShot);
-                
-            foreach (InvaderShot shot in invaderShots)
+            foreach (Invader invader in livingInvaders.Where(invader => DetectCollisionShot(playerShot, invader.Sprite)))
             {
-                MoveSprites.Descent(shot);
+                invader.Die();
+                playerShot = GamePieces.SHOT_EMPTY;
             }
+            // check if playerShot out of bounds
+            if (playerShot.Position.Y <= topLine.Position.Y)
+            {
+                playerShot = GamePieces.SHOT_EMPTY;
+            }
+            
+            // Invader Shots
+            for (int i = invaderShots.Count - 1; i >= 0; i--)
+            {
+                InvaderShot shot = invaderShots[i];
+                MoveSprites.Descent(shot);
+                if (DetectCollisionShot(shot.Sprite, player))
+                {
+                    invaderShots.RemoveAt(i);
+                    //PlayerHit();
+                }
+
+                // check if Invader Shots out of bounds
+                if ((shot.Sprite.Position.Y + shot.Sprite.GetGlobalBounds().Height) >= bottomLine.Position.Y)
+                {
+                    invaderShots.RemoveAt(i);
+                }
+            }
+            
+
+        }
+
+        private static bool DetectCollisionShot(Sprite shot, Sprite other)
+        { 
+            bool collisionX = (shot.Position.X + shot.GetGlobalBounds().Width) >= other.Position.X
+                && (other.Position.X + other.GetGlobalBounds().Width) >= shot.Position.X;
+            bool collisionY = (shot.Position.Y + shot.GetGlobalBounds().Height) >= other.Position.Y
+                && (other.Position.Y + other.GetGlobalBounds().Height) >= shot.Position.Y;
+
+            return collisionX && collisionY;
         }
 
         private delegate void StepAction(Invader invader);
@@ -140,6 +178,7 @@ namespace SpaceInvaders
          * for all Invaders as a block.
          * </summary>
          */
+        [SuppressMessage("ReSharper", "InvertIf")]
         internal void Step()
         {
             StepAction action;
@@ -177,7 +216,7 @@ namespace SpaceInvaders
             foreach (Invader invader in invaders)
             {
                 action(invader);
-
+                
                 if (invader.IsDying)
                 {
                     livingInvaders.Remove(invader);
@@ -200,18 +239,9 @@ namespace SpaceInvaders
                 bottomLine,
                 topLine
             };
-            foreach (Bunker bunker in bunkers)
-            {
-                all.Add(bunker.GetSprite());
-            }
-            foreach (Invader invader in livingInvaders)
-            {
-                all.Add(invader.Sprite);
-            }
-            foreach (InvaderShot shot in invaderShots)
-            {
-                all.Add(shot.Sprite);
-            }
+            all.AddRange(bunkers.Select(bunker => bunker.GetSprite()));
+            all.AddRange(livingInvaders.Select(invader => invader.Sprite));
+            all.AddRange(invaderShots.Select(shot => shot.Sprite));
 
             return all;
         }
@@ -223,6 +253,7 @@ namespace SpaceInvaders
          * </summary>
          * <returns>Returns true only if a game pause was requested.</returns>
          */
+        [SuppressMessage("ReSharper", "InvertIf")]
         internal bool ParsePlayerInput()
         {
             if (UserInput.Pause)

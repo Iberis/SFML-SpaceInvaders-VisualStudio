@@ -11,7 +11,7 @@ namespace SpaceInvaders
     internal static class UserInput
     {
         internal static bool Pause { get; set; }
-        internal static Dictionary<string, Boolean> InputStates = new Dictionary<string, Boolean>()
+        internal static readonly Dictionary<string, bool> InputStates = new Dictionary<string, bool>()
         {
             { "Left", false },
             { "Right", false },
@@ -23,7 +23,7 @@ namespace SpaceInvaders
         /// </summary>
         /// <param name="sender"><see cref="Window.KeyPressed"/></param>
         /// <param name="e"><see cref="Window.KeyPressed"/></param>
-        internal static void Window_KeyPressed(Object sender, KeyEventArgs e)
+        internal static void Window_KeyPressed(object sender, KeyEventArgs e)
         {
             //Window win = sender as Window;
 
@@ -51,7 +51,7 @@ namespace SpaceInvaders
         /// </summary>
         /// <param name="sender"><see cref="Window"/></param>
         /// <param name="e"><see cref="Window.KeyEventArgs"/></param>
-        internal static void Window_KeyReleased(Object sender, KeyEventArgs e)
+        internal static void Window_KeyReleased(object sender, KeyEventArgs e)
         {
             switch (e.Code)
             {

@@ -62,7 +62,7 @@ namespace SpaceInvaders
             throw new NotImplementedException();
         }
 
-        private void Tick(Object source, ElapsedEventArgs e)
+        private void Tick(object source, ElapsedEventArgs e)
         {
             game.Step();
             game.RandomShot();
