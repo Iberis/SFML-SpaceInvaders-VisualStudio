@@ -105,7 +105,7 @@ namespace SpaceInvaders
          * <summary>
          * Rolls to see if an invader should spawn a shot
          * and assigns the task to a random invader if so.
-         * The shot is then added to a List for savekeeping.
+         * The shot is then added to a List for save-keeping.
          * </summary>
          */
         internal void RandomShot()
