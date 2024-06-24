@@ -11,14 +11,14 @@ namespace SpaceInvaders
      */
     internal static class MoveSprites
     {
-        private const int ShotSpeed = 1;
-        private const int StepDistance = 3;
+        private const int SHOT_SPEED = 1;
+        private const int STEP_DISTANCE = 3;
 
         #region Invaders
         internal static void StepLeft(Invader invader)
         {
             Sprite sprite = invader.Sprite;
-            float x = sprite.Position.X - StepDistance;
+            float x = sprite.Position.X - STEP_DISTANCE;
             float y = sprite.Position.Y;
 
             sprite.Position = new Vector2f(x, y);
@@ -28,7 +28,7 @@ namespace SpaceInvaders
         internal static void StepRight(Invader invader)
         {
             Sprite sprite = invader.Sprite;
-            float x = sprite.Position.X + StepDistance;
+            float x = sprite.Position.X + STEP_DISTANCE;
             float y = sprite.Position.Y;
 
             sprite.Position = new Vector2f(x, y);
@@ -59,7 +59,7 @@ namespace SpaceInvaders
             shot.Sprite.Position = new Vector2f
                 (
                     shot.Sprite.Position.X,
-                    shot.Sprite.Position.Y + ShotSpeed
+                    shot.Sprite.Position.Y + SHOT_SPEED
                 );
             shot.Animate();
         }
@@ -77,7 +77,7 @@ namespace SpaceInvaders
                 playerShot.Position = new Vector2f
                 (
                     playerShot.Position.X,
-                    playerShot.Position.Y - ShotSpeed
+                    playerShot.Position.Y - SHOT_SPEED
                 );
             }
         }

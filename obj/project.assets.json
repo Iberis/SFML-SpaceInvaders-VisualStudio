@@ -1134,22 +1134,23 @@
   },
   "packageFolders": {
     "C:\\Users\\MagyarTo\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "H:\\C#\\SFML\\SpaceInvaders\\SpaceInvaders.csproj",
+      "projectUniqueName": "H:\\C#\\SpaceInvaders\\SpaceInvaders.csproj",
       "projectName": "SpaceInvaders",
-      "projectPath": "H:\\C#\\SFML\\SpaceInvaders\\SpaceInvaders.csproj",
+      "projectPath": "H:\\C#\\SpaceInvaders\\SpaceInvaders.csproj",
       "packagesPath": "C:\\Users\\MagyarTo\\.nuget\\packages\\",
-      "outputPath": "H:\\C#\\SFML\\SpaceInvaders\\obj\\",
+      "outputPath": "H:\\C#\\SpaceInvaders\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
         "C:\\Users\\MagyarTo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1169,6 +1170,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -1204,7 +1210,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

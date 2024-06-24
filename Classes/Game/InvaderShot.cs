@@ -1,4 +1,5 @@
 ﻿using SFML.Graphics;
+using SFML.Window;
 
 namespace SpaceInvaders
 {
@@ -10,20 +11,23 @@ namespace SpaceInvaders
     {
         internal Sprite Sprite { get; }
         private readonly Texture[] textures;
-        private int index;
-        private int movementTracker;
-        
+        private readonly InvaderType type;
+        private int index = 0;
+        private int tickTracker = 0;
+        internal bool NeedCleanUp { get; private set; } = false;
+        internal bool IsDying { get; private set; } = false;
+
         /**
          * <param name="textures">Contains the textures used to cycle through for animation.
          * The length is arbitrary, but must at least contain one texture.</param>
          * <param name="sprite">An initialised sprite ready for use.</param>
+         * <param name="type">InvaderType that spawned the shot</param>
          */
-        internal InvaderShot(Texture[] textures, Sprite sprite)
+        internal InvaderShot(Texture[] textures, Sprite sprite, InvaderType type)
         {
             this.textures = textures;
-            this.Sprite = sprite;
-            movementTracker = 0;
-            index = 0;
+            Sprite = sprite;
+            this.type = type;
         }
 
         /**
@@ -35,13 +39,20 @@ namespace SpaceInvaders
          */
         internal void Animate()
         {
-            if (movementTracker < 8)
+            // Change Animation State only every 8th tick
+            if (tickTracker < 8)
             {
-                movementTracker++;
+                tickTracker++;
                 return;
             }
-            movementTracker = 0;
-
+            tickTracker = 0;
+            
+            if (IsDying)
+            {
+                NeedCleanUp = true;
+                return;
+            }
+            
             index++;
             if (index >= textures.Length)
                 index = 0;
@@ -49,5 +60,12 @@ namespace SpaceInvaders
             Sprite.Texture = textures[index];
         }
 
+        internal void Impact()
+        {
+            IsDying = true;
+            Textures catalogue = Textures.GetInstance(); 
+            Sprite.Texture = new Texture(catalogue.invaderShotExplosionWhite);
+            Sprite.Color = catalogue.getColor(type);
+        }
     }
 }

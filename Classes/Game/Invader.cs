@@ -19,7 +19,7 @@ namespace SpaceInvaders
 
         /**
          * <param name="textures">An array of two textures which are used for animation.</param>
-         * <param name="index">Determins the starting texture. Either 0 or 1.</param>
+         * <param name="index">Determines the starting texture. Either 0 or 1.</param>
          * <param name="type">The type of the Invader is used to determine what shots are generated.</param>
          */
         internal Invader(Texture[] textures, BinaryState index, InvaderType type) 
@@ -80,8 +80,9 @@ namespace SpaceInvaders
             {
                 IsAlive = false;
                 IsDying = true;
-                Sprite.Texture = Textures.GetInstance().invaderDeathWhite;
-                //TODO: Manipulate white texture to adjust to invader color
+                Textures catalogue = Textures.GetInstance(); 
+                Sprite.Texture = new Texture(catalogue.invaderDeathWhite);
+                Sprite.Color = catalogue.getColor(type);
             }
             else
                 Console.WriteLine("Dead Invader was hit: " 

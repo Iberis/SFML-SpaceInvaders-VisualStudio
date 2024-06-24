@@ -1,15 +1,11 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using System;
-using System.Security.Policy;
 
 namespace SpaceInvaders
 {
     internal class Bunker
     {
-        internal const uint WIDTH = 20;
-        internal const uint HEIGHT = 14;
-        // 22 x 16
         private static readonly bool[,] TEMPLATE = {
             { false, false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, false},
             { false, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false},
@@ -26,11 +22,13 @@ namespace SpaceInvaders
             { true, true, true, true, false, false, false, false, false,false, false, false, false, false, false, false, true, true, true, true},
             { true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true},
         };
+        internal static readonly uint HEIGHT = (uint)TEMPLATE.GetLength(0);
+        internal static readonly uint WIDTH = (uint)TEMPLATE.GetLength(1);
 
         //State of the bunker as a by pixel representation
         private bool[,] state;
         //Whether the texture needs updating
-        private bool changed;
+        private bool hasChanged;
 
         private Sprite sprite;
         
@@ -39,7 +37,7 @@ namespace SpaceInvaders
         {
             state = new bool[HEIGHT, WIDTH];
             Array.Copy(TEMPLATE, state, state.Length);
-            changed = true; // initialises to true for initial loading via GetSprite()
+            hasChanged = true; // initialises to true for initial loading via GetSprite()
             sprite = new Sprite
             {
                 Position = position
@@ -48,7 +46,7 @@ namespace SpaceInvaders
 
         internal Sprite GetSprite() 
         {
-            if (!changed) return sprite;
+            if (!hasChanged) return sprite;
             
             byte[] bytes = new byte[state.Length * 4];
             for (int j = 0; j < HEIGHT; j++)
@@ -74,7 +72,7 @@ namespace SpaceInvaders
             Image image = new Image(WIDTH, HEIGHT, bytes);
             Texture texture = new Texture(image);
             sprite.Texture = texture;
-            changed = false;
+            hasChanged = false;
 
             return sprite;
         }

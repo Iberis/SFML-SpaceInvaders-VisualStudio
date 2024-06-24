@@ -3,8 +3,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AssemblyTitle>SFML_First</AssemblyTitle>
-    <Product>SFML_First</Product>
+    <AssemblyTitle>SpaceInvaders</AssemblyTitle>
+    <Product>SpaceInvaders</Product>
     <Copyright>Copyright ©  2022</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
@@ -12,27 +12,35 @@
   <ItemGroup>
     <Content Include="Assets\Cannon.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace>Assets</CustomToolNamespace>
     </Content>
     <Content Include="Assets\Crab1.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace>Assets</CustomToolNamespace>
     </Content>
     <Content Include="Assets\Crab2.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace>Assets</CustomToolNamespace>
     </Content>
     <Content Include="Assets\Effects.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace>Assets</CustomToolNamespace>
     </Content>
     <Content Include="Assets\Jelly1.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace>Assets</CustomToolNamespace>
     </Content>
     <Content Include="Assets\Jelly2.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace>Assets</CustomToolNamespace>
     </Content>
     <Content Include="Assets\Squid1.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace>Assets</CustomToolNamespace>
     </Content>
     <Content Include="Assets\Squid2.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CustomToolNamespace>Assets</CustomToolNamespace>
     </Content>
     <Content Include="csfml-audio-2.dll">
       <Visible>False</Visible>
@@ -66,6 +74,11 @@
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Beispiel.cs" />
+    <None Update="Assets\effectsCoord.txt">
+      <CustomToolNamespace>Assets</CustomToolNamespace>
+    </None>
+    <None Update="Assets\startscreen.bmp">
+      <CustomToolNamespace>Assets</CustomToolNamespace>
+    </None>
   </ItemGroup>
 </Project>

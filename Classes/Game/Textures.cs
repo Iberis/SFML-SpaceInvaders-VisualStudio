@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using System;
+using SFML.Graphics;
 
 namespace SpaceInvaders
 {
@@ -11,10 +12,10 @@ namespace SpaceInvaders
      */
     internal class Textures
     {
-        private static readonly Textures Singleton = new Textures();
+        private static readonly Textures SINGLETON = new();
         internal static Textures GetInstance()
         {
-            return Singleton;
+            return SINGLETON;
         }
 
         /**
@@ -27,7 +28,7 @@ namespace SpaceInvaders
         private Textures()
         {
             // Player texture
-            Image playerImage = new Image(@"H:\c#\SFML\SpaceInvaders\Assets\Cannon.bmp");
+            Image playerImage = new Image(@"Assets\Cannon.bmp");
             playerImage.CreateMaskFromColor(Color.Black);
             player = new Texture(playerImage);
 
@@ -37,19 +38,20 @@ namespace SpaceInvaders
 
             #region Invaders
             // Load images and set transparency
-            Image smallInvader1 = new Image(@"H:\c#\SFML\SpaceInvaders\Assets\Squid1.bmp");
+            Image smallInvader1 = new Image(@"Assets\Squid1.bmp");
             smallInvader1.CreateMaskFromColor(Color.Black);
-            Image smallInvader2 = new Image(@"H:\c#\SFML\SpaceInvaders\Assets\Squid2.bmp");
+            Image smallInvader2 = new Image(@"Assets\Squid2.bmp");
             smallInvader2.CreateMaskFromColor(Color.Black);
 
-            Image mediumInvader1 = new Image(@"H:\c#\SFML\SpaceInvaders\Assets\Crab1.bmp");
+            Image mediumInvader1 = new Image(@"Assets\Crab1.bmp");
             mediumInvader1.CreateMaskFromColor(Color.Black);
-            Image mediumInvader2 = new Image(@"H:\c#\SFML\SpaceInvaders\Assets\Crab2.bmp");
+            Image mediumInvader2 = new Image(@"Assets\Crab2.bmp")
+                ;
             mediumInvader2.CreateMaskFromColor(Color.Black);
 
-            Image largeInvader1 = new Image(@"H:\c#\SFML\SpaceInvaders\Assets\Jelly1.bmp");
+            Image largeInvader1 = new Image(@"Assets\Jelly1.bmp");
             largeInvader1.CreateMaskFromColor(Color.Black);
-            Image largeInvader2 = new Image(@"H:\c#\SFML\SpaceInvaders\Assets\Jelly2.bmp");
+            Image largeInvader2 = new Image(@"Assets\Jelly2.bmp");
             largeInvader2.CreateMaskFromColor(Color.Black);
 
             // Generate Textures
@@ -75,7 +77,7 @@ namespace SpaceInvaders
             #region Effects
             // Effects include shots and death/destruction textures
             // Load sprite map image and set transparency
-            Image effects = new Image(@"H:\C#\SFML\SpaceInvaders\Assets\Effects.bmp");
+            Image effects = new Image(@"Assets\Effects.bmp");
             effects.CreateMaskFromColor(Color.Black);
 
             // Generate textures
@@ -121,12 +123,23 @@ namespace SpaceInvaders
         internal readonly Texture[] invaderSmall;
         internal readonly Texture[] invaderMedium;
         internal readonly Texture[] invaderLarge;
-
-        internal readonly Texture invaderShotExplosionWhite;
-        internal readonly Texture invaderDeathWhite;
+        
         internal readonly Texture[] invaderSmallShots;
         internal readonly Texture[] invaderMediumShots;
         internal readonly Texture[] invaderLargeShots;
+        
+        internal readonly Texture invaderDeathWhite;
+        internal readonly Texture invaderShotExplosionWhite;
+        internal Color getColor(InvaderType type)
+        {
+            return type switch
+            {
+                InvaderType.Small => new Color(60, 255, 0),
+                InvaderType.Medium => new Color(0, 244, 255),
+                InvaderType.Large => new Color(229, 0, 255),
+                _ => throw new ArgumentException("InvaderType not implemented")
+            };
+        }
         #endregion
     }
 }

@@ -35,10 +35,11 @@ namespace SpaceInvaders
         internal const int WIDTH = 285;
         internal const int HEIGHT = WIDTH * (4/3);
         private const int BUNKER_COUNT = 4;
-        private const float BUNKER_BORDER_OFFSET = WIDTH/(BUNKER_COUNT + 1);
+        private const float BUNKER_BORDER_OFFSET = WIDTH/(BUNKER_COUNT + 1f);
 
         private bool stepRight;
         private readonly Random rng;
+        private int extraLives;
 
         #region Sprites
         // Positions of all invaders, living and dead,
@@ -49,6 +50,7 @@ namespace SpaceInvaders
         private readonly List<Invader> livingInvaders;
         private readonly List<InvaderShot> invaderShots;
         private readonly Sprite player;
+        private readonly List<Sprite> extraLiveSprites;
         private Sprite playerShot = GamePieces.SHOT_EMPTY;
         private readonly List<Bunker> bunkers;
         private readonly RectangleShape topLine;
@@ -59,6 +61,7 @@ namespace SpaceInvaders
         {
             stepRight = true;
             rng = new Random();
+            extraLives = 3;
 
             player = GamePieces.GetPlayer();
             invaders = GamePieces.GetInvaders();
@@ -66,7 +69,7 @@ namespace SpaceInvaders
             invaderShots = new List<InvaderShot>();
             bunkers = new List<Bunker>();
             PlaceBunkers();
-
+            
             bottomLine = new RectangleShape(new Vector2f(WIDTH, 1))
             {
                 FillColor = new Color(32, 255, 32),
@@ -77,28 +80,33 @@ namespace SpaceInvaders
                 FillColor = new Color(32, 255, 32),
                 Position = new Vector2f(0, 25)
             };
+            
+            extraLiveSprites = new List<Sprite>();
+            PlacePlayerLives();
             return;
 
             void PlaceBunkers()
             {
                 float height = HEIGHT - (player.GetGlobalBounds().Height * 6 + Bunker.HEIGHT);
-                Vector2f startPosition = new Vector2f(BUNKER_BORDER_OFFSET - Bunker.WIDTH / 2, height);
+                Vector2f startPosition = new Vector2f(BUNKER_BORDER_OFFSET - Bunker.WIDTH / 2f, height);
                 for (int i = 0; i < BUNKER_COUNT; i++)
                 {
                     bunkers.Add(new Bunker(startPosition));
                     startPosition.X += BUNKER_BORDER_OFFSET;
                 }
             }
-        }
-
-        // Triggered on playerShot hitting an Invader
-        // The dying invader is left in the attribute List "livingInvaders"
-        // for the purpose of the death animation. It is then removed 
-        // the next time Step() is called.
-        private void Kill(Invader invader)
-        {
-            invader.Die();
-            playerShot = GamePieces.SHOT_EMPTY;
+            
+            void PlacePlayerLives()
+            {
+                Vector2f position = new(7, bottomLine.Position.Y + 5);
+                for (int i = extraLives; i > 0; i--)
+                {
+                    Sprite tmp = GamePieces.GetPlayer();
+                    tmp.Position = position;
+                    extraLiveSprites.Add(tmp);
+                    position.X = position.X + tmp.GetGlobalBounds().Width + 7;
+                }
+            }
         }
 
         /**
@@ -127,38 +135,54 @@ namespace SpaceInvaders
          */
         internal void AdvanceShots()
         {
-            // Player Shot
+        #region playerShot
             MoveSprites.Ascent(playerShot);
             foreach (Invader invader in livingInvaders.Where(invader => DetectCollisionShot(playerShot, invader.Sprite)))
             {
+                // The dying invader is left in the attribute List "livingInvaders"
+                // for the purpose of the death animation. It is then removed 
+                // the next time Step() is called.
                 invader.Die();
+                //TODO: impact
                 playerShot = GamePieces.SHOT_EMPTY;
             }
             // check if playerShot out of bounds
             if (playerShot.Position.Y <= topLine.Position.Y)
             {
+                //TODO: impact
                 playerShot = GamePieces.SHOT_EMPTY;
             }
-            
-            // Invader Shots
+        #endregion playerShot
+
+        #region invaderShots
             for (int i = invaderShots.Count - 1; i >= 0; i--)
             {
                 InvaderShot shot = invaderShots[i];
+                
+                if (shot.NeedCleanUp)
+                {
+                    invaderShots.RemoveAt(i);
+                    continue;
+                }
+                if (shot.IsDying)
+                {
+                    shot.Animate();
+                    continue;
+                }
+                
                 MoveSprites.Descent(shot);
                 if (DetectCollisionShot(shot.Sprite, player))
                 {
-                    invaderShots.RemoveAt(i);
-                    //PlayerHit();
+                    shot.Impact();
+                    PlayerHit();
                 }
-
                 // check if Invader Shots out of bounds
                 if ((shot.Sprite.Position.Y + shot.Sprite.GetGlobalBounds().Height) >= bottomLine.Position.Y)
                 {
-                    invaderShots.RemoveAt(i);
+                    shot.Impact();
                 }
             }
-            
-
+        #endregion invaderShots
         }
 
         private static bool DetectCollisionShot(Sprite shot, Sprite other)
@@ -171,6 +195,24 @@ namespace SpaceInvaders
             return collisionX && collisionY;
         }
 
+        /**
+         * <summary>
+         * Functionality for after the player got hit.
+         * </summary>
+         */
+        private void PlayerHit()
+        {
+            if (extraLives > 0)
+            {
+                extraLives--;
+                extraLiveSprites.RemoveAt(extraLiveSprites.Count - 1);
+            }
+            else
+            {
+                //Player Death --TODO
+            }
+        }
+        
         private delegate void StepAction(Invader invader);
         /**
          * <summary>
@@ -189,8 +231,7 @@ namespace SpaceInvaders
                 * 13 is the distance in logical pixels to the edge of 
                 * the game area after which movement in that direction stops
                 */
-                if (WIDTH - invaders[10].Sprite.Position.X 
-                    - 12 < 13)
+                if (WIDTH - invaders[10].Sprite.Position.X - 12 < 13)
                 {
                     action = MoveSprites.StepDown;
                     stepRight = false;
@@ -239,6 +280,7 @@ namespace SpaceInvaders
                 bottomLine,
                 topLine
             };
+            all.AddRange(extraLiveSprites);
             all.AddRange(bunkers.Select(bunker => bunker.GetSprite()));
             all.AddRange(livingInvaders.Select(invader => invader.Sprite));
             all.AddRange(invaderShots.Select(shot => shot.Sprite));

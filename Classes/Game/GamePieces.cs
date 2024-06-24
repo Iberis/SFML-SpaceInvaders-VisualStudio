@@ -14,12 +14,14 @@ namespace SpaceInvaders
     internal static class GamePieces
     {
         private const float PLAYER_SPRITE_SCALING_FACTOR = 0.0362f;
-        // 182 is the width of one alien row
-        private const float START_POSITION_X = Game.WIDTH / 2f - 182f / 2f;
-        private const float START_POSITION_Y = 57f;
         //Space between two alien sprites. Size + Offset
         private const int OFFSET_HORIZONTAL = 12 + 5;
         private const int OFFSET_VERTICAL = 8 + 5;
+        // 182 is the width of one alien row
+        private static readonly Vector2f ALIEN_START_POSITION = new Vector2f(
+            Game.WIDTH / 2f - 182f / 2f,
+            57f
+        );
         internal static readonly Sprite SHOT_EMPTY = new Sprite()
         {
             Position = new Vector2f(0, 0),
@@ -54,22 +56,13 @@ namespace SpaceInvaders
          */
         internal static InvaderShot GenerateInvaderShot(InvaderType type, Vector2f startPosition)
         {
-            Texture[] textures;
-            switch (type)
+            Texture[] textures = type switch
             {
-                case InvaderType.Small:
-                    textures = Textures.GetInstance().invaderSmallShots;
-                    break;
-                case InvaderType.Medium:
-                    textures = Textures.GetInstance().invaderMediumShots;
-                    break;
-                case InvaderType.Large:
-                    textures = Textures.GetInstance().invaderLargeShots;
-                    break;
-                default:
-                    throw new NotImplementedException(
-                        "Shot textures not implemented for InvaderType: " + type);
-            }
+                InvaderType.Small => Textures.GetInstance().invaderSmallShots,
+                InvaderType.Medium => Textures.GetInstance().invaderMediumShots,
+                InvaderType.Large => Textures.GetInstance().invaderLargeShots,
+                _ => throw new NotImplementedException("Shot textures not implemented for InvaderType: " + type)
+            };
 
             Sprite sprite = new Sprite(textures[0])
             {
@@ -77,7 +70,7 @@ namespace SpaceInvaders
                 Scale = new Vector2f(1f / 2f, 1f / 2f)
             };
 
-            return new InvaderShot(textures, sprite);
+            return new InvaderShot(textures, sprite, type);
         }
 
         /**
@@ -89,7 +82,7 @@ namespace SpaceInvaders
          */
         internal static Invader[] GetInvaders()
         {
-            Vector2f currentPosition = new Vector2f(START_POSITION_X, START_POSITION_Y);
+            Vector2f currentPosition = ALIEN_START_POSITION;
             List<Invader> invaders = new List<Invader>();
             invaders.AddRange(GetSmallInvaders(ref currentPosition));
             invaders.AddRange(GetMediumInvaders(ref currentPosition));
@@ -112,27 +105,32 @@ namespace SpaceInvaders
                 currentPosition.X += OFFSET_HORIZONTAL;
             }
             // increment for next row
-            currentPosition = new Vector2f(START_POSITION_X, currentPosition.Y + OFFSET_VERTICAL);
+            currentPosition = new Vector2f(ALIEN_START_POSITION.X, currentPosition.Y + OFFSET_VERTICAL);
 
             return list;
         }
 
-        private static List<Invader> GetMediumInvaders(ref Vector2f currentPosition)
+        private static IEnumerable<Invader> GetMediumInvaders(ref Vector2f currentPosition)
         {
             List<Invader> list = new List<Invader>();
             for (int row = 0; row < 2; row++) 
             {
                 for (int i = 0; i < 11; i++)
                 {
-                    Invader invader = new Invader(Textures.GetInstance().invaderMedium, (BinaryState)(i % 2), InvaderType.Medium);
-                    // X + 1 is to center the column
-                    invader.Sprite.Position = new Vector2f(currentPosition.X + 1, currentPosition.Y);
+                    Invader invader = new Invader(Textures.GetInstance().invaderMedium, (BinaryState)(i % 2), InvaderType.Medium)
+                        {
+                            Sprite =
+                            {
+                                // X + 1 is to center the column
+                                Position = new Vector2f(currentPosition.X + 1, currentPosition.Y)
+                            }
+                        };
                     list.Add(invader);
 
                     currentPosition.X += OFFSET_HORIZONTAL;
                 }
                 // increment for next row
-                currentPosition = new Vector2f(START_POSITION_X, currentPosition.Y + OFFSET_VERTICAL);
+                currentPosition = new Vector2f(ALIEN_START_POSITION.X, currentPosition.Y + OFFSET_VERTICAL);
             }
 
             return list;
@@ -154,7 +152,7 @@ namespace SpaceInvaders
                     currentPosition.X += OFFSET_HORIZONTAL;
                 }
                 // increment for next row
-                currentPosition = new Vector2f(START_POSITION_X, currentPosition.Y + OFFSET_VERTICAL);
+                currentPosition = new Vector2f(ALIEN_START_POSITION.X, currentPosition.Y + OFFSET_VERTICAL);
             }
 
             return list;
@@ -174,8 +172,8 @@ namespace SpaceInvaders
 
             FloatRect size = sprite.GetGlobalBounds();
             sprite.Position = new Vector2f(
-                    Game.WIDTH/2 - size.Width/2, 
-                    Game.HEIGHT - (size.Height + 35)
+                    Game.WIDTH/2f - size.Width/2f, 
+                    Game.HEIGHT - (size.Height + 35f)
                 );
 
             return sprite;
